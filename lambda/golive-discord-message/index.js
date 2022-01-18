@@ -2,7 +2,8 @@ const https = require('https')
 const {
   twitchClientId,
   discordWebhookToken,
-  twitchClientSecret
+  twitchClientSecret,
+  twitchBroadcasterId
 } = require('./secrets.json');
 
 async function httpRequest({ path, method, hostname, headers = {}, body }) {
@@ -74,7 +75,7 @@ async function getTwitchToken() {
 async function getStreamInfos(twitchAccessToken) {
   const rawStreamInfos  = await httpRequest({
     hostname: 'api.twitch.tv',
-    path: '/helix/channels?broadcaster_id=29891279',
+    path: `/helix/channels?broadcaster_id=${twitchBroadcasterId}`,
     headers: {
       Authorization: `Bearer ${twitchAccessToken}`,
       'Client-ID': twitchClientId,
