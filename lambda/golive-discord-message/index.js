@@ -115,7 +115,7 @@ async function sendDiscordMessage({ title: streamTitle, game_name: gameName }) {
   }
 }
 
-exports.handler = async (event, context) => {
+exports.handler = async (event, context, callback) => {
   try {
     const twitchAccessToken = await getTwitchToken();
     const streamInfos = await getStreamInfos(twitchAccessToken);
@@ -124,17 +124,17 @@ exports.handler = async (event, context) => {
     context.succeed('ok');
 
     console.log('everything is ok!')
-    return {
+    callback(null, {
       statusCode: 200,
       body: JSON.stringify({ ok: true })
-    }
+    });
   } catch (e) {
     console.log(e);
     context.fail(e.toString());
 
-    return {
-      statusCode: 404,
+    callback(null, {
+      statusCode: 500,
       body: JSON.stringify({ ok: false })
-    }
+    });
   }
 }
