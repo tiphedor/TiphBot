@@ -132,7 +132,7 @@ exports.handler = async (event, context) => {
     context.fail(e.toString());
 
     return {
-      statusCode: 500,
+      statusCode: 404,
       body: JSON.stringify({ ok: false })
     }
   }
