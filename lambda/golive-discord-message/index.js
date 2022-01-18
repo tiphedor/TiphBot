@@ -121,8 +121,6 @@ exports.handler = async (event, context, callback) => {
     const streamInfos = await getStreamInfos(twitchAccessToken);
     await sendDiscordMessage(streamInfos);
 
-    context.succeed('ok');
-
     console.log('everything is ok!')
     callback(null, {
       statusCode: 200,
@@ -130,7 +128,6 @@ exports.handler = async (event, context, callback) => {
     });
   } catch (e) {
     console.log(e);
-    context.fail(e.toString());
 
     callback(null, {
       statusCode: 500,
