@@ -123,6 +123,7 @@ exports.handler = async (event, context) => {
 
     context.succeed('ok');
 
+    console.log('everything is ok!')
     return {
       statusCode: 200,
       body: JSON.stringify({ ok: true })
