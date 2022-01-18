@@ -122,8 +122,20 @@ exports.handler = async (event, context) => {
     await sendDiscordMessage(streamInfos);
 
     context.succeed('ok');
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ ok: true }),
+      headers: {'Content-Type': 'application/json'}
+    }
   } catch (e) {
     console.log(e);
     context.fail(e.toString());
+
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ ok: false }),
+      headers: {'Content-Type': 'application/json'}
+    }
   }
 }
