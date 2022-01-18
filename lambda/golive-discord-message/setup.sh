@@ -1,4 +1,6 @@
 #!/bin/bash
+# shellcheck disable=SC2154
+set -e
 
 ### Setup Twitch lambdas
 # golive-discord-message
