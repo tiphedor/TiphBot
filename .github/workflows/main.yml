@@ -8,6 +8,10 @@ on:
 
 jobs:
   deploy_golive-discord-message:
+    strategy:
+      fail-fast: false
+      matrix:
+        lambda: [ "golive-discord-message" ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,6 +28,7 @@ jobs:
         env:
           CI: true
         run: |
+          cd lambda/${{ matrix.lambda }}
           yarn
       - name: inject-secrets
         id: create-json
@@ -31,9 +36,9 @@ jobs:
         with:
           name: "secrets.json"
           json: ${{ secrets.JSON_SECRETS_golive_discord_message }}
-          dir: 'lambda/golive-discord-message'
+          dir: 'lambda/${{ matrix.lambda }}'
       - name: deploy
         run: |
-          cd lambda/golive-discord-message
+          cd lambda/${{ matrix.lambda }}
           zip -j deploy.zip ./*
-          aws lambda update-function-code --function-name=TiphBot-TwitchGoLive-Discord --zip-file=fileb://deploy.zip 
+          aws lambda update-function-code --function-name=${{ matrix.lambda }} --zip-file=fileb://deploy.zip
