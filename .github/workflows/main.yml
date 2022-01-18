@@ -7,7 +7,7 @@ on:
     - main
 
 jobs:
-  deploy_lambda:
+  deploy_golive-discord-message:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,6 +25,13 @@ jobs:
           CI: true
         run: |
           yarn
+      - name: inject-secrets
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "secrets.json"
+          json: ${{ secrets.JSON_SECRETS_golive_discord_message }}
+          dir: 'lambda/golive-discord-message'
       - name: deploy
         run: |
           cd lambda/golive-discord-message
