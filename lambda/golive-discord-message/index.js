@@ -125,8 +125,7 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ ok: true }),
-      headers: {'Content-Type': 'application/json'}
+      body: JSON.stringify({ ok: true })
     }
   } catch (e) {
     console.log(e);
@@ -134,8 +133,7 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 500,
-      body: JSON.stringify({ ok: false }),
-      headers: {'Content-Type': 'application/json'}
+      body: JSON.stringify({ ok: false })
     }
   }
 }
