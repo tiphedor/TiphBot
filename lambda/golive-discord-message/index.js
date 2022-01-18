@@ -122,6 +122,7 @@ exports.handler = async (event, context, callback) => {
     await sendDiscordMessage(streamInfos);
 
     console.log('everything is ok!')
+
     callback(null, {
       statusCode: 200,
       body: JSON.stringify({ ok: true })
