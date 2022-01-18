@@ -123,7 +123,7 @@ exports.handler = async (event, context) => {
 
     context.succeed('ok');
   } catch (e) {
-    console.error(e);
+    console.log(e);
     context.fail(e.toString());
   }
 }
