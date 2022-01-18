@@ -1,0 +1,15 @@
+{
+  "name": "tiphbot",
+  "version": "1.0.0",
+  "description": " Collection of tools/scripts/... that i use to automate my Twitch channel (twitch.tv/tiphedor) ",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiphedor/TiphBot.git"
+  },
+  "author": "Martin STEFFEN <mail@tiph.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tiphedor/TiphBot/issues"
+  },
+  "homepage": "https://github.com/tiphedor/TiphBot#readme"
+}
