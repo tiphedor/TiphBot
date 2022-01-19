@@ -1,0 +1,13 @@
+{
+  "name": "@tiphbot/twitch-eventsub-sigcheck",
+  "version": "1.0.0",
+  "description": "Twitch API Webhook signature checker",
+  "main": "index.js",
+  "repository": "https://github.com/tiphedor/TiphBot",
+  "author": "Martin STEFFEN <mail@tiph.io>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "cryptojs": "^2.5.3"
+  }
+}
