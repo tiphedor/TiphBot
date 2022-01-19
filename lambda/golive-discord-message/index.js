@@ -4,6 +4,7 @@ const {
   discordWebhookToken,
   twitchClientSecret,
   twitchBroadcasterId,
+  webhookSecret,
 } = require('./secrets.json');
 const { signatureCheck } = require('@tiphbot/twitch-eventsub-sigcheck');
 
@@ -77,7 +78,7 @@ async function sendDiscordMessage({ title: streamTitle, game_name: gameName }) {
 }
 
 exports.handler = async (event, context, callback) => {
-  if (!signatureCheck(event.headers, event.body)) {
+  if (!signatureCheck(event.headers, event.body, webhookSecret, true)) {
     return {
       statusCode: 403,
       body: JSON.stringify({

@@ -43,6 +43,25 @@ const signatureCheck = (
   const incomingMessageTimestamp = getHeader(headers, TWITCH_MESSAGE_TIMESTAMP);
   const incomingMessageSignature = getHeader(headers, TWITCH_MESSAGE_SIGNATURE);
   const incomingMessageType = getHeader(headers, MESSAGE_TYPE);
+  if (
+    !incomingMessageID ||
+    !incomingMessageTimestamp ||
+    !incomingMessageSignature ||
+    !incomingMessageType
+  ) {
+    verbose &&
+      console.log(
+        `Missing at least one required header ! ${headers.toString()}`
+      );
+
+    return false;
+  }
+
+  if (!body) {
+    verbose && console.log(`Body must be defined.`);
+
+    return false;
+  }
 
   // Compute HMAC signature
   const message = `${incomingMessageID}${incomingMessageTimestamp}${body}`;
