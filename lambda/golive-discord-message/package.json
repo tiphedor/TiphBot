@@ -1,0 +1,13 @@
+{
+  "name": "@tiphbot/golive-discord-message",
+  "version": "1.0.0",
+  "description": "Lambda called by Twitch whenever a live starts, it sends a message in a Discord channel.",
+  "main": "index.js",
+  "repository": "https://github.com/tiphedor/TiphBot",
+  "author": "Martin STEFFEN <mail@tiph.io>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "axios": "^0.25.0"
+  }
+}
