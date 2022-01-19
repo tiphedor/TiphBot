@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy-golive-discord-message:
-    uses: ./.github/workflows/deployLambda.yml@main
+    uses: tiphedor/TiphBot/.github/workflows/deployLambda.yml@main
     with:
       lambdaName: golive-discord-message
     secrets:
