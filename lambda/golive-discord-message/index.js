@@ -1,4 +1,4 @@
-const https = require('https');
+const axios = require('axios');
 const {
   twitchClientId,
   discordWebhookToken,
@@ -6,88 +6,35 @@ const {
   twitchBroadcasterId,
 } = require('./secrets.json');
 
-async function httpRequest({ path, method, hostname, headers = {}, body }) {
-  const bodyString = JSON.stringify(body);
-
-  const options = {
-    hostname,
-    method,
-    path,
-    port: 443,
-    headers: {
-      ...headers,
-      ...(method !== 'GET' && body
-        ? {
-            'Content-Length': bodyString.length,
-            'Content-Type': 'application/json',
-          }
-        : {}),
-    },
-  };
-
-  const promise = new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
-      res.setEncoding('utf8');
-      let responseBody = '';
-
-      res.on('data', (chunk) => {
-        responseBody += chunk;
-      });
-
-      res.on('end', () => {
-        try {
-          const json = JSON.parse(responseBody);
-          resolve(json);
-        } catch (e) {
-          resolve(responseBody);
-        }
-      });
-    });
-
-    req.on('error', (err) => {
-      reject(err);
-    });
-
-    if (method !== 'GET' && body) {
-      req.write(bodyString);
-    }
-    req.end();
-  });
-
-  return await promise;
-}
-
 async function getTwitchToken() {
-  const rawTokenInfo = await httpRequest({
-    hostname: 'id.twitch.tv',
-    path: `/oauth2/token?client_id=${twitchClientId}&client_secret=${twitchClientSecret}&grant_type=client_credentials`,
-    method: 'POST',
-    headers: {
-      'Client-ID': twitchClientId,
-    },
+  const rawTokenInfo = await axios({
+    method: 'post',
+    url: `https://id.twitch.tv/oauth2/token?client_id=${twitchClientId}&client_secret=${twitchClientSecret}&grant_type=client_credentials`,
+    headers: {},
   });
 
-  if (!rawTokenInfo || !rawTokenInfo.access_token) {
+  const accessToken = rawTokenInfo?.data?.access_token;
+  if (!accessToken) {
     throw new Error(
       'Could not find token inside response body. Body was: ' +
         rawTokenInfo.toString()
     );
   }
 
-  return rawTokenInfo.access_token;
+  return accessToken;
 }
 
 async function getStreamInfos(twitchAccessToken) {
-  const rawStreamInfos = await httpRequest({
-    hostname: 'api.twitch.tv',
-    path: `/helix/channels?broadcaster_id=${twitchBroadcasterId}`,
+  const rawStreamInfos = await axios({
+    method: 'GET',
+    url: `https://api.twitch.tv/helix/channels?broadcaster_id=${twitchBroadcasterId}`,
     headers: {
       Authorization: `Bearer ${twitchAccessToken}`,
       'Client-ID': twitchClientId,
     },
   });
 
-  const streamInfos = rawStreamInfos?.data?.[0];
+  const streamInfos = rawStreamInfos?.data?.data?.[0];
   if (!streamInfos) {
     throw new Error(
       'no streamInfos received. Body was: ' + rawStreamInfos.toString()
@@ -98,11 +45,13 @@ async function getStreamInfos(twitchAccessToken) {
 }
 
 async function sendDiscordMessage({ title: streamTitle, game_name: gameName }) {
-  const response = await httpRequest({
-    hostname: 'discord.com',
+  const response = await axios({
     method: 'POST',
-    path: `/api/webhooks/${discordWebhookToken}`,
-    body: {
+    url: `https://discord.com/api/webhooks/${discordWebhookToken}`,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
       content:
         'tiphedor est en live ! Venez le regarder !\n\n:arrow_forward:  [twitch.tv/tiphedor](https://twitch.tv/tiphedor)\n\n_ _',
       embeds: [
@@ -119,7 +68,7 @@ async function sendDiscordMessage({ title: streamTitle, game_name: gameName }) {
     },
   });
 
-  if (response !== '') {
+  if (response?.data !== '') {
     throw new Error(
       'Could not send message to discord: ' + response.toString()
     );
