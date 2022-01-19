@@ -1,9 +1,9 @@
-const https = require('https')
+const https = require('https');
 const {
   twitchClientId,
   discordWebhookToken,
   twitchClientSecret,
-  twitchBroadcasterId
+  twitchBroadcasterId,
 } = require('./secrets.json');
 
 async function httpRequest({ path, method, hostname, headers = {}, body }) {
@@ -16,10 +16,12 @@ async function httpRequest({ path, method, hostname, headers = {}, body }) {
     port: 443,
     headers: {
       ...headers,
-      ...(method !== 'GET' && body ? {
-        'Content-Length': bodyString.length,
-        'Content-Type': 'application/json'
-      } : {})
+      ...(method !== 'GET' && body
+        ? {
+            'Content-Length': bodyString.length,
+            'Content-Type': 'application/json',
+          }
+        : {}),
     },
   };
 
@@ -36,7 +38,7 @@ async function httpRequest({ path, method, hostname, headers = {}, body }) {
         try {
           const json = JSON.parse(responseBody);
           resolve(json);
-        } catch(e) {
+        } catch (e) {
           resolve(responseBody);
         }
       });
@@ -47,7 +49,7 @@ async function httpRequest({ path, method, hostname, headers = {}, body }) {
     });
 
     if (method !== 'GET' && body) {
-      req.write(bodyString)
+      req.write(bodyString);
     }
     req.end();
   });
@@ -62,29 +64,34 @@ async function getTwitchToken() {
     method: 'POST',
     headers: {
       'Client-ID': twitchClientId,
-    }
+    },
   });
 
   if (!rawTokenInfo || !rawTokenInfo.access_token) {
-    throw new Error('Could not find token inside response body. Body was: ' + rawTokenInfo.toString());
+    throw new Error(
+      'Could not find token inside response body. Body was: ' +
+        rawTokenInfo.toString()
+    );
   }
 
   return rawTokenInfo.access_token;
 }
 
 async function getStreamInfos(twitchAccessToken) {
-  const rawStreamInfos  = await httpRequest({
+  const rawStreamInfos = await httpRequest({
     hostname: 'api.twitch.tv',
     path: `/helix/channels?broadcaster_id=${twitchBroadcasterId}`,
     headers: {
       Authorization: `Bearer ${twitchAccessToken}`,
       'Client-ID': twitchClientId,
-    }
+    },
   });
 
   const streamInfos = rawStreamInfos?.data?.[0];
   if (!streamInfos) {
-    throw new Error('no streamInfos received. Body was: ' + rawStreamInfos.toString())
+    throw new Error(
+      'no streamInfos received. Body was: ' + rawStreamInfos.toString()
+    );
   }
 
   return streamInfos;
@@ -96,23 +103,26 @@ async function sendDiscordMessage({ title: streamTitle, game_name: gameName }) {
     method: 'POST',
     path: `/api/webhooks/${discordWebhookToken}`,
     body: {
-      "content": "tiphedor est en live ! Venez le regarder !\n\n:arrow_forward:  [twitch.tv/tiphedor](https://twitch.tv/tiphedor)\n\n_ _",
-      "embeds": [
+      content:
+        'tiphedor est en live ! Venez le regarder !\n\n:arrow_forward:  [twitch.tv/tiphedor](https://twitch.tv/tiphedor)\n\n_ _',
+      embeds: [
         {
-          "title": streamTitle,
-          "description": gameName,
-          "url": "https://twitch.tv/tiphedor",
-          "color": 13917276,
-          "image": {
-            "url":"https://static-cdn.jtvnw.net/previews-ttv/live_user_tiphedor-1920x1080.jpg"
-          }
-        }
-      ]
-    }
+          title: streamTitle,
+          description: gameName,
+          url: 'https://twitch.tv/tiphedor',
+          color: 13917276,
+          image: {
+            url: 'https://static-cdn.jtvnw.net/previews-ttv/live_user_tiphedor-1920x1080.jpg',
+          },
+        },
+      ],
+    },
   });
 
   if (response !== '') {
-    throw new Error('Could not send message to discord: ' + response.toString());
+    throw new Error(
+      'Could not send message to discord: ' + response.toString()
+    );
   }
 }
 
@@ -122,18 +132,18 @@ exports.handler = async (event, context, callback) => {
     const streamInfos = await getStreamInfos(twitchAccessToken);
     await sendDiscordMessage(streamInfos);
 
-    console.log('everything is ok!')
+    console.log('everything is ok!');
 
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify({ ok: true })
+      body: JSON.stringify({ ok: true }),
     });
   } catch (e) {
     console.log(e);
 
     callback(null, {
       statusCode: 500,
-      body: JSON.stringify({ ok: false })
+      body: JSON.stringify({ ok: false }),
     });
   }
-}
+};
