@@ -44,5 +44,5 @@ jobs:
       - name: deploy
         run: |
           cd lambda/${{ inputs.lambdaName }}
-          zip -j deploy.zip ./*
+          zip -r deploy.zip ./*
           aws lambda update-function-code --function-name=${{ inputs.lambdaName }} --zip-file=fileb://deploy.zip
