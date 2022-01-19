@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@tiphbot/twitch-eventsub-sigcheck@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@tiphbot/twitch-eventsub-sigcheck/-/twitch-eventsub-sigcheck-1.0.0.tgz#629e98862ca04609383f0caaaa2e86b671a7b5c0"
-  integrity sha512-+G0jvalkJOW1SCjlib+xB1wVai3SEPaT2NcddpX3ky4Xt4c9T2xzyosKnmBzSYMlRr+G5BkTixOjpM3r5p1eiQ==
+"@tiphbot/twitch-eventsub-sigcheck@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@tiphbot/twitch-eventsub-sigcheck/-/twitch-eventsub-sigcheck-1.0.1.tgz#21c84b096bb96adffc5037aacc0ef52e95859779"
+  integrity sha512-bjyTxwEC784nALuYfMfo+thqs/Zh9NN/zpD7yYiwz4lzMoFhitUCoT3KO+bs/5S7c0w1qMNjBLq2XjTSPmGExA==
   dependencies:
     cryptojs "^2.5.3"
 
