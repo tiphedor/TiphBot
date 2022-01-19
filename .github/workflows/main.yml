@@ -7,38 +7,11 @@ on:
     - main
 
 jobs:
-  deploy_golive-discord-message:
-    strategy:
-      fail-fast: false
-      matrix:
-        lambda: [ "golive-discord-message" ]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1
-      - name: yarn
-        env:
-          CI: true
-        run: |
-          cd lambda/${{ matrix.lambda }}
-          yarn
-      - name: inject-secrets
-        id: create-json
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: "secrets.json"
-          json: ${{ secrets[matrix.lambda] }}
-          dir: 'lambda/${{ matrix.lambda }}'
-      - name: deploy
-        run: |
-          cd lambda/${{ matrix.lambda }}
-          zip -j deploy.zip ./*
-          aws lambda update-function-code --function-name=${{ matrix.lambda }} --zip-file=fileb://deploy.zip
+  deploy-golive-discord-message:
+    uses: ./.github/workflows/deployLambda.yml@main
+    with:
+      lambdaName: golive-discord-message
+    secrets:
+      jsonSecrets: ${{ secrets.LAMBDA_DISCORD_GOLIVE_MESSAGE_JSON }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

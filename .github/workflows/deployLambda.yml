@@ -1,0 +1,48 @@
+name: Deploy to AWS Lambda
+
+on:
+  workflow_call:
+    inputs:
+      lambdaName:
+        required: true
+        type: string
+    secrets:
+      jsonSecrets:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+
+jobs:
+  deploy_lambda:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+      - name: yarn
+        env:
+          CI: true
+        run: |
+          cd lambda/${{ inputs.lambdaName }}
+          yarn
+      - name: inject-secrets
+        id: create-json
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "secrets.json"
+          json: ${{ secrets.jsonSecrets }}
+          dir: 'lambda/${{ inputs.lambdaName }}'
+      - name: deploy
+        run: |
+          cd lambda/${{ inputs.lambdaName }}
+          zip -j deploy.zip ./*
+          aws lambda update-function-code --function-name=${{ inputs.lambdaName }} --zip-file=fileb://deploy.zip
