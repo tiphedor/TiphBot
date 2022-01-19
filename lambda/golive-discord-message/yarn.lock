@@ -2,12 +2,24 @@
 # yarn lockfile v1
 
 
+"@tiphbot/twitch-eventsub-sigcheck@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@tiphbot/twitch-eventsub-sigcheck/-/twitch-eventsub-sigcheck-1.0.0.tgz#629e98862ca04609383f0caaaa2e86b671a7b5c0"
+  integrity sha512-+G0jvalkJOW1SCjlib+xB1wVai3SEPaT2NcddpX3ky4Xt4c9T2xzyosKnmBzSYMlRr+G5BkTixOjpM3r5p1eiQ==
+  dependencies:
+    cryptojs "^2.5.3"
+
 axios@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.25.0.tgz#349cfbb31331a9b4453190791760a8d35b093e0a"
   integrity sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==
   dependencies:
     follow-redirects "^1.14.7"
+
+cryptojs@^2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/cryptojs/-/cryptojs-2.5.3.tgz#909547ecf15bac456e275459b39f2ef45d7fcbb9"
+  integrity sha1-kJVH7PFbrEVuJ1RZs58u9F1/y7k=
 
 follow-redirects@^1.14.7:
   version "1.14.7"

@@ -5,6 +5,7 @@ const {
   twitchClientSecret,
   twitchBroadcasterId,
 } = require('./secrets.json');
+const { signatureCheck } = require('@tiphbot/twitch-eventsub-sigcheck');
 
 async function getTwitchToken() {
   const rawTokenInfo = await axios({
@@ -76,6 +77,17 @@ async function sendDiscordMessage({ title: streamTitle, game_name: gameName }) {
 }
 
 exports.handler = async (event, context, callback) => {
+  if (!signatureCheck(event.headers, event.body)) {
+    return {
+      statusCode: 403,
+      body: JSON.stringify({
+        ok: false,
+        message:
+          "sigcheck failed, you're not who you say you are, so fuck off!",
+      }),
+    };
+  }
+
   try {
     const twitchAccessToken = await getTwitchToken();
     const streamInfos = await getStreamInfos(twitchAccessToken);
