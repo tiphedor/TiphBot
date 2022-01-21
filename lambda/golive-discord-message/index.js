@@ -100,15 +100,13 @@ exports.handler = async (event, context, callback) => {
     };
   }
 
-  console.log('Signature check OK !');
-  console.log('=====================');
-  console.log('Message type: ', messageType);
-  console.log('Body:         ', JSON.stringify(parsedBody));
-
   if (isChallenge(messageType)) {
     console.log('about to ret');
     console.log(parsedBody);
     console.log(parsedBody.challenge);
+    console.log(event.challenge);
+    console.log(typeof parsedBody);
+    console.log(typeof event.body);
     console.log(
       JSON.stringify({
         statusCode: 200,
