@@ -3,6 +3,8 @@ name: Deploy to AWS Lambda
 on:
   workflow_dispatch:
   push:
+    paths:
+    - 'lambda/golive-discord-message/**'
     branches:
     - main
 
