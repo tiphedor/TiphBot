@@ -73,7 +73,7 @@ const signatureCheck = (
 
   let parsedBody = null;
   try {
-    parsedBody = JSON.stringify(body);
+    parsedBody = JSON.parse(body);
   } catch (e) {
     console.warn(
       '@tiphbot/twitch-eventsub-sigcheck',
