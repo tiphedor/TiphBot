@@ -107,6 +107,8 @@ exports.handler = async (event, context, callback) => {
 
   if (isChallenge(messageType)) {
     console.log('about to ret');
+    console.log(parsedBody);
+    console.log(parsedBody.challenge);
     console.log(
       JSON.stringify({
         statusCode: 200,
