@@ -100,12 +100,26 @@ exports.handler = async (event, context, callback) => {
     };
   }
 
+  console.log('Signature check OK !');
+  console.log('=====================');
+  console.log('Message type: ', messageType);
+  console.log('Body:         ', JSON.stringify(parsedBody));
+
   if (isChallenge(messageType)) {
+    console.log('about to ret');
+    console.log(
+      JSON.stringify({
+        statusCode: 200,
+        body: handleChallenge(parsedBody),
+      })
+    );
     return {
       statusCode: 200,
       body: handleChallenge(parsedBody),
     };
   }
+
+  console.log('after');
 
   try {
     const twitchAccessToken = await getTwitchToken();
