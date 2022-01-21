@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@tiphbot/twitch-eventsub-sigcheck": "^2.0.0",
+    "@tiphbot/twitch-eventsub-sigcheck": "^2.0.1",
     "axios": "^0.25.0"
   }
 }
