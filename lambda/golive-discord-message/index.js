@@ -101,32 +101,16 @@ exports.handler = async (event, context, callback) => {
   }
 
   if (isChallenge(messageType)) {
-    console.log('about to ret');
-    console.log(parsedBody);
-    console.log(parsedBody.challenge);
-    console.log(event.challenge);
-    console.log(typeof parsedBody);
-    console.log(typeof event.body);
-    console.log(
-      JSON.stringify({
-        statusCode: 200,
-        body: handleChallenge(parsedBody),
-      })
-    );
     return {
       statusCode: 200,
       body: handleChallenge(parsedBody),
     };
   }
 
-  console.log('after');
-
   try {
     const twitchAccessToken = await getTwitchToken();
     const streamInfos = await getStreamInfos(twitchAccessToken);
     await sendDiscordMessage(streamInfos);
-
-    console.log('everything is ok!');
 
     callback(null, {
       statusCode: 200,
